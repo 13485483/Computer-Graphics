@@ -73,7 +73,7 @@ function defineRing(size, innerDiameter, distanceFromOrbitCenter, color) {
  * @returns {THREE.Mesh}
  */
 function createPlanet(planetData){
-    var planetMaterial = new THREE.MeshStandardMaterial({ color: planetData.color });
+    var planetMaterial = new THREE.MeshPhongMaterial({ color: planetData.color });
     planetMaterial.receiveShadow = true;
     planetMaterial.castShadow = true;
     var planetGeometry = new THREE.SphereGeometry(planetData.size);
@@ -208,3 +208,4 @@ function moveMoon(moon, planet, planetData, time) {
         moon.position.z = moon.position.z + planet.position.z;
     }
 }
+

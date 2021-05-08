@@ -113,20 +113,21 @@
             // etoile = new THREE.Mesh(etoileGeometry, etoileMaterial);
             // scene.add(etoile);
 
-            // var starsGeometry = new THREE.SphereGeometry(90, 32, 32);
-            // var starsMaterial = new THREE.MeshBasicMaterial({
-            // map: THREE.ImageUtils.loadTexture('img/galaxy_starfield.png'),
-            // side: THREE.BackSide
-            // });
-            // var stars = new THREE.Mesh(starsGeometry, starsMaterial);
-            // scene.add(stars);
+             /*var starsGeometry = new THREE.SphereGeometry(90, 32, 32);
+             var starsMaterial = new THREE.MeshBasicMaterial({
+             map: THREE.ImageUtils.loadTexture('img/galaxy_starfield.png'),
+             side: THREE.BackSide
+            });
+             var stars = new THREE.Mesh(starsGeometry, starsMaterial);
+             scene.add(stars);*/
 
-            starGeo = new THREE.Geometry();
+           /* starGeo = new THREE.Geometry();
+            var starCount= {amount: 0};
             for(let i=0; i<8000; i++){
             star = new THREE.Vector3(
-            Math.random() * 600 - 300,
-            Math.random() * 600 - 300,
-            Math.random() * 600 - 300
+                Math.random() * 600 - 300,
+                Math.random() * 600 - 300,
+                Math.random() * 600 - 300
              );
         starGeo.vertices.push(star);
             }
@@ -137,8 +138,29 @@
             map: sprite1
         })
         stars = new THREE.Points(starGeo,starMaterial);
-        scene.add(stars);
+        scene.add(stars);*/
+        this.addStars = function(starsCount, minDistance){
+        var d = function(){return (Math.random()-0.5)*2 * minDistance;}; // 返回[-1,1] * minDistance
 
+        var geometry = new THREE.Geometry();
+        for(var i = 0; i < starsCount; i++){
+            var star = new THREE.Vector3(d(),d(),d());
+            if(star.length() < minDistance) { // 这是length()函数，代表向量长度
+                star.setLength(minDistance);
+            }
+            geometry.vertices.push(star);
+        }
+        
+        var r = Math.random();
+        var size = 1;
+        if(r  < 0.5) size =1;
+        else if(r < 0.8) size = 2;
+        else size =3;
+        var material = new THREE.PointsMaterial({color:0xf0f0f0, size:size, sizeAttenuation: false});
+        var stars = new THREE.Points(geometry, material);
+        this.scene.add(stars);
+    };
+var starCount = {starNumber: 1};
 
 
 
@@ -164,14 +186,46 @@
 
             ///////////////////////////////////////// GUI /////////////////////////////////////////
 
-            var gui = new dat.GUI();
+            /*var gui = new dat.GUI();
             var orbitFolder = gui.addFolder('speed');
             orbitFolder.add(orbitData, 'value', 1, 10);
             orbitFolder.add(orbitData, 'runOrbit', 0, 1);
             var lightFolder = gui.addFolder('light');
             lightFolder.add(pointLight, 'intensity', 0, 10);
-        }
+            var starFolder = gui.addFolder('star');
+            starFolder.add(starsCount, 'starNumber', 1, 10000);
+            addStars(starCount, 1000);*/
 
+            var gui;
+    function buildGui()
+    {
+      gui = new dat.GUI();
+      var orbitFolder = gui.addFolder('speed');
+      var lightFolder = gui.addFolder('light');
+      var starFolder = gui.addFolder('star');
+      var params = {
+        value: orbitData.value,
+        runOrbit: orbitData.runOrbit,
+        starNumber: starCount.starNumber
+      }
+      orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
+      {
+        orbitData.value = val;
+      });
+      orbitFolder.add(params, 'runOrbit', 0, 1).onChange(function (val)
+      {
+        orbitData.runOrbit = val;
+      });
+      lightFolder.add(pointLight, 'intensity', 0, 10);
+      starFolder.add(params, 'starNumber', 1, 10000).onChange(function (val)
+      {
+        starCount.starNumber = val;
+        addStars(starCount.starNumber, 1000);
+      });
+      gui.open();
+    }
+    buildGui();
+        }
         function animate() {
 
             var time = Date.now();
