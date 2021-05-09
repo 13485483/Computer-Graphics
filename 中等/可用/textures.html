@@ -192,6 +192,7 @@ var starCount = {starNumber: 1};
             var gui;
             var atSun = new Boolean(false);
             var atEarth = new Boolean(false);
+            var refresh = new Boolean(false);
     function buildGui()
     {
       gui = new dat.GUI();
@@ -204,7 +205,8 @@ var starCount = {starNumber: 1};
         runOrbit: orbitData.runOrbit,
         addStars: starCount.starNumber,
         sun: atSun = Boolean(false),
-        earth: atEarth = Boolean(false)
+        earth: atEarth = Boolean(false),
+        refresh: refresh = Boolean(false)
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -222,18 +224,28 @@ var starCount = {starNumber: 1};
       });
       camFolder.add(params, 'sun', 0, 1).onChange(function (val)
       {
-          atSun = true; 
+          atSun = val; 
           camera.position.x = sun.position.x;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
+        
       }
       );
+      
       camFolder.add(params, 'earth', 0, 1).onChange(function (val)
       {
           atEarth = true; 
           camera.position.x = sun.position.x + 25;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
+      }
+      );
+      camFolder.add(params, 'refresh', 0, 1).onChange(function (val)
+      {
+          refresh = true; 
+          camera.position.z = 30;
+        camera.position.x = -30;
+        camera.position.y = 30;
       }
       );
      
