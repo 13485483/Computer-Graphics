@@ -192,6 +192,7 @@ var starCount = {starNumber: 1};
             var gui;
             var atSun = new Boolean(false);
             var atEarth = new Boolean(false);
+            var atMercury = new Boolean(false);
             var refresh = new Boolean(false);
     function buildGui()
     {
@@ -206,7 +207,8 @@ var starCount = {starNumber: 1};
         addStars: starCount.starNumber,
         sun: atSun = Boolean(false),
         earth: atEarth = Boolean(false),
-        refresh: refresh = Boolean(false)
+        refresh: refresh = Boolean(false),
+        mercury: atMercury = Boolean(false)
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -234,15 +236,25 @@ var starCount = {starNumber: 1};
       
       camFolder.add(params, 'earth', 0, 1).onChange(function (val)
       {
-          atEarth = true; 
+          atEarth = val; 
           camera.position.x = sun.position.x + 25;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
+          camera.lookAt(new THREE.Vector3(-(sun.position.x+25), -sun.position.y, -sun.position.z));
+      }
+      );
+      camFolder.add(params, 'mercury', 0, 1).onChange(function (val)
+      {
+          atEarth = val; 
+          camera.position.x = sun.position.x + 10;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          camera.lookAt(new THREE.Vector3(sun.position.x+10, sun.position.y, sun.position.z));
       }
       );
       camFolder.add(params, 'refresh', 0, 1).onChange(function (val)
       {
-          refresh = true; 
+          refresh = val; 
           camera.position.z = 30;
         camera.position.x = -30;
         camera.position.y = 30;
