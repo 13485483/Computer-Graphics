@@ -193,7 +193,10 @@ var starCount = {starNumber: 1};
             var atSun = new Boolean(false);
             var atEarth = new Boolean(false);
             var atMercury = new Boolean(false);
+            var atVenus = new Boolean(false);
             var refresh = new Boolean(false);
+            var atMoon = new Boolean(false);
+            var atMars = new Boolean(false);
     function buildGui()
     {
       gui = new dat.GUI();
@@ -208,7 +211,10 @@ var starCount = {starNumber: 1};
         sun: atSun = Boolean(false),
         earth: atEarth = Boolean(false),
         refresh: refresh = Boolean(false),
-        mercury: atMercury = Boolean(false)
+        mercury: atMercury = Boolean(false),
+        venus: atVenus = Boolean(false), 
+        moon: atMoon = Boolean(false),
+        mars: atMars = Boolean(false),
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -240,16 +246,43 @@ var starCount = {starNumber: 1};
           camera.position.x = sun.position.x + 25;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
-          camera.lookAt(new THREE.Vector3(-(sun.position.x+25), -sun.position.y, -sun.position.z));
+        
       }
       );
       camFolder.add(params, 'mercury', 0, 1).onChange(function (val)
       {
-          atEarth = val; 
+          atMercury = val; 
           camera.position.x = sun.position.x + 10;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
-          camera.lookAt(new THREE.Vector3(sun.position.x+10, sun.position.y, sun.position.z));
+          
+      }
+      );
+      camFolder.add(params, 'venus', 0, 1).onChange(function (val)
+      {
+          atVenus = val; 
+          camera.position.x = sun.position.x + 19;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'moon', 0, 1).onChange(function (val)
+      {
+          atMoon = val; 
+          camera.position.x = sun.position.x + 2.8;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'mars', 0, 1).onChange(function (val)
+      {
+          atMars = val; 
+          camera.position.x = sun.position.x + 38;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
       }
       );
       camFolder.add(params, 'refresh', 0, 1).onChange(function (val)
