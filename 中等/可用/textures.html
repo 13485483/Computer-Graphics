@@ -140,26 +140,28 @@
         stars = new THREE.Points(starGeo,starMaterial);
         scene.add(stars);*/
         this.addStars = function(starsCount, minDistance){
-        var d = function(){return (Math.random()-0.5)*2 * minDistance;}; // 返回[-1,1] * minDistance
+        var d = function(){return (Math.random()-0.5)*2 * minDistance;}; 
 
         var geometry = new THREE.Geometry();
         for(var i = 0; i < starsCount; i++){
             var star = new THREE.Vector3(d(),d(),d());
-            if(star.length() < minDistance) { // 这是length()函数，代表向量长度
+            if(star.length() < minDistance) {
                 star.setLength(minDistance);
             }
             geometry.vertices.push(star);
         }
         
         var r = Math.random();
-        var size = 1;
+        var size = 0.5;
         if(r  < 0.5) size =1;
-        else if(r < 0.8) size = 2;
-        else size =3;
+        else if(r < 0.8) size = 1.5;
+        else size =2;
         var material = new THREE.PointsMaterial({color:0xf0f0f0, size:size, sizeAttenuation: false});
+        material.shininess = 1000;
         var stars = new THREE.Points(geometry, material);
         this.scene.add(stars);
     };
+
 var starCount = {starNumber: 1};
 
 
@@ -186,27 +188,21 @@ var starCount = {starNumber: 1};
 
             ///////////////////////////////////////// GUI /////////////////////////////////////////
 
-            /*var gui = new dat.GUI();
-            var orbitFolder = gui.addFolder('speed');
-            orbitFolder.add(orbitData, 'value', 1, 10);
-            orbitFolder.add(orbitData, 'runOrbit', 0, 1);
-            var lightFolder = gui.addFolder('light');
-            lightFolder.add(pointLight, 'intensity', 0, 10);
-            var starFolder = gui.addFolder('star');
-            starFolder.add(starsCount, 'starNumber', 1, 10000);
-            addStars(starCount, 1000);*/
-
+        
             var gui;
+            var atSun = new Boolean(false);
     function buildGui()
     {
       gui = new dat.GUI();
       var orbitFolder = gui.addFolder('speed');
       var lightFolder = gui.addFolder('light');
       var starFolder = gui.addFolder('star');
+      var camFolder  = gui.addFolder('camera');
       var params = {
         value: orbitData.value,
         runOrbit: orbitData.runOrbit,
-        starNumber: starCount.starNumber
+        addStars: starCount.starNumber,
+        sun: atSun = Boolean(false)
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -217,11 +213,19 @@ var starCount = {starNumber: 1};
         orbitData.runOrbit = val;
       });
       lightFolder.add(pointLight, 'intensity', 0, 10);
-      starFolder.add(params, 'starNumber', 1, 10000).onChange(function (val)
+      starFolder.add(params, 'addStars', 1, 10000).onChange(function (val)
       {
         starCount.starNumber = val;
         addStars(starCount.starNumber, 1000);
       });
+      camFolder.add(params, 'sun', 0, 1).onChange(function (val)
+      {
+          atSun = true; 
+          camera.position.x = sun.position.x;
+          camera.position.y = sun.position.y;
+      }
+      );
+     
       gui.open();
     }
     buildGui();
