@@ -197,6 +197,10 @@ var starCount = {starNumber: 1};
             var refresh = new Boolean(false);
             var atMoon = new Boolean(false);
             var atMars = new Boolean(false);
+            var atJupiter = new Boolean(false);
+            var atSaturn = new Boolean(false);
+            var atUranus = new Boolean(false);
+            var atNeptune = new Boolean(false);
     function buildGui()
     {
       gui = new dat.GUI();
@@ -215,6 +219,10 @@ var starCount = {starNumber: 1};
         venus: atVenus = Boolean(false), 
         moon: atMoon = Boolean(false),
         mars: atMars = Boolean(false),
+        jupiter: atJupiter = Boolean(false), 
+        saturn: atSaturn = Boolean(false),
+        uranus: atUranus = Boolean(false),
+        neptune: atNeptune = Boolean(false),
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -280,6 +288,42 @@ var starCount = {starNumber: 1};
       {
           atMars = val; 
           camera.position.x = sun.position.x + 38;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'jupiter', 0, 1).onChange(function (val)
+      {
+          atJupiter = val; 
+          camera.position.x = sun.position.x + 53;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'saturn', 0, 1).onChange(function (val)
+      {
+          atSaturn = val; 
+          camera.position.x = sun.position.x + 78;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'uranus', 0, 1).onChange(function (val)
+      {
+          atUranus = val; 
+          camera.position.x = sun.position.x + 100;
+          camera.position.y = sun.position.y;
+          camera.position.z = sun.position.z;
+          
+      }
+      );
+      camFolder.add(params, 'neptune', 0, 1).onChange(function (val)
+      {
+          atNeptune = val; 
+          camera.position.x = sun.position.x + 120;
           camera.position.y = sun.position.y;
           camera.position.z = sun.position.z;
           
