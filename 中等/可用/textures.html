@@ -231,9 +231,9 @@ var starCount = {starNumber: 1};
       camFolder.add(params, 'earth', 0, 1).onChange(function (val)
       {
           atEarth = true; 
-          camera.position.x = sun.position.x;
+          camera.position.x = sun.position.x + 25;
           camera.position.y = sun.position.y;
-          camera.position.z = sun.position.z - 10;
+          camera.position.z = sun.position.z;
       }
       );
      
