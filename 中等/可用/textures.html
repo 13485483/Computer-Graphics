@@ -22,7 +22,7 @@
         var pointLight, plan;
 
         var sun, mercury, venus, moon, earth, mars, jupiter, saturn, uranus, neptune, ring;
-        var controls, scene, camera, renderer, scene;
+        var controls, scene, camera, renderer, scene, earthNight;
 
         // Déclaration des planètes et des anneaux
        
@@ -35,6 +35,7 @@
         var saturnData = defineTexturedPlanet(1075.23, 0.004, 78, 8, "img/saturn.jpg");
         var uranusData = defineTexturedPlanet(1485.40, 0.002, 100, 2, "img/uranus.jpg");
         var neptuneData = defineTexturedPlanet(1866.00, 0.0005, 120, 2, "img/neptune.jpg");
+        var earthNightData = defineTexturedPlanet(365.2564, 0.015, 25, 1, "./img/earthNight.jpg");
 
 
 
@@ -54,6 +55,8 @@
 
         var orbitData = { value: 10, runOrbit: true, runRotation: true };
         var clock = new THREE.Clock();
+        
+        var night = new Boolean(false);
 
         function init() {
 
@@ -94,7 +97,7 @@
             
             /////////////// SOLEIL, PLANETES ET ANNEAUX - SUN, PLANETS AND RING /////////////////
 
-             sunTexture = new THREE.TextureLoader().load('img/sun.jpg');
+            var sunTexture = new THREE.TextureLoader().load('img/sun.jpg');
             var sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
             var sunGeometry = new THREE.SphereGeometry(8, 24, 24);
             sun = new THREE.Mesh(sunGeometry, sunMaterial);
@@ -179,6 +182,7 @@ var starCount = {starNumber: 1};
             saturn = createTexturedPlanet(saturnData);
             uranus = createTexturedPlanet(uranusData);
             neptune = createTexturedPlanet(neptuneData);
+    
 
             saturnRing = createRing(saturnRingData);
             saturnRing2 = createRing(saturnRing2Data);
@@ -201,6 +205,7 @@ var starCount = {starNumber: 1};
             var atSaturn = new Boolean(false);
             var atUranus = new Boolean(false);
             var atNeptune = new Boolean(false);
+            
     function buildGui()
     {
       gui = new dat.GUI();
@@ -223,6 +228,7 @@ var starCount = {starNumber: 1};
         saturn: atSaturn = Boolean(false),
         uranus: atUranus = Boolean(false),
         neptune: atNeptune = Boolean(false),
+        night: night = Boolean(false)
       }
       orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
       {
@@ -337,6 +343,21 @@ var starCount = {starNumber: 1};
         camera.position.y = 30;
       }
       );
+      gui.add(params, 'night', 0, 1).onChange(function(val)
+      {
+          night = val;
+          if(val == 0)
+          {
+              scene.add(earth);
+              scene.remove(earthNight);
+          }
+          else{
+          scene.remove(earth);
+          earthNight = createTexturedPlanet(earthNightData);
+          }
+         
+      }
+      );
      
       gui.open();
     }
@@ -349,7 +370,13 @@ var starCount = {starNumber: 1};
             // Mouvement du soleil, des planètes/lunes et des anneaux
             // Moving sun, planets/moons and rings
             sun.rotation.y += orbitData.value * 10;
+        
+            if(night == true){
+            movePlanet(earthNight, earthNightData, time);
+            }
+            else {
             movePlanet(earth, earthData, time);
+            }
             movePlanet(mercury, mercuryData, time);
             movePlanet(venus, venusData, time);
             movePlanet(earth, earthData, time);

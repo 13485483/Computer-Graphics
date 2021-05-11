@@ -141,6 +141,7 @@ function traceOrbits() {
     mercuryOrbit = createRing(defineRing(mercuryData.distanceFromOrbitCenter + orbitWidth, mercuryData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
     venusOrbit = createRing(defineRing(venusData.distanceFromOrbitCenter + orbitWidth, venusData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
     earthOrbit = createRing(defineRing(earthData.distanceFromOrbitCenter + orbitWidth, earthData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
+    earthNightOrbit = createRing(defineRing(earthNightData.distanceFromOrbitCenter + orbitWidth, earthNightData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
     marsOrbit = createRing(defineRing(marsData.distanceFromOrbitCenter + orbitWidth, marsData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
     jupiterOrbit = createRing(defineRing(jupiterData.distanceFromOrbitCenter + orbitWidth, jupiterData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
     saturnOrbit = createRing(defineRing(saturnData.distanceFromOrbitCenter + orbitWidth, saturnData.distanceFromOrbitCenter - orbitWidth, 0, 0xffffff));
