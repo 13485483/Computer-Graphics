@@ -14,6 +14,7 @@
     <script src="js/Planet.js"></script>
     <script src="js/KeyCameraListenr.js"></script>
     <script src="js/Application.js"></script>
+	<script src="js/dat.gui.min.js"></script>
 </head>
 <body>
 	<style>
@@ -97,9 +98,267 @@
     function main() {
         var baseContainer = document.body;
         var app = new Application(baseContainer);
+		var starCount =  1;
+        var atSun = new Boolean(false);
+        var atEarth = new Boolean(false);
+        var atMercury = new Boolean(false);
+        var atVenus = new Boolean(false);
+        var atMoon = new Boolean(false);
+        var atMars = new Boolean(false);
+        var atJupiter = new Boolean(false);
+        var atSaturn = new Boolean(false);
+        var atUranus = new Boolean(false);
+        var atNeptune = new Boolean(false);
+       
+		function buildGui()
+        {
+          gui = new dat.GUI();
+          var orbitFolder = gui.addFolder('speed');
+          var lightFolder = gui.addFolder('light');
+          var starFolder = gui.addFolder('star');
+          var camFolder  = gui.addFolder('camera');
+          var params = {
+           // value: orbitData.value,
+          //  runOrbit: orbitData.runOrbit,
+            addStars: starCount,
+            sun: atSun = Boolean(false),
+            earth: atEarth = Boolean(false),
+           mercury: atMercury = Boolean(false),
+          //  venus: atVenus = Boolean(false), 
+          //  moon: atMoon = Boolean(false),
+          //  mars: atMars = Boolean(false),
+          //  jupiter: atJupiter = Boolean(false), 
+         //   saturn: atSaturn = Boolean(false),
+         //   uranus: atUranus = Boolean(false),
+         //   neptune: atNeptune = Boolean(false),
+         //   night: night = Boolean(false),
+         //   removeStars: starCount.starNumber
+          }
+         /* orbitFolder.add(params, 'value', 1, 10).onChange(function (val)
+          {
+            orbitData.value = val;
+          });*/
+         /* orbitFolder.add(params, 'runOrbit', 0, 1).onChange(function (val)
+          {
+            orbitData.runOrbit = val;
+          });*/
+          //lightFolder.add(pointLight, 'intensity', 0, 10);
+          starFolder.add(params, 'addStars', 1, 8000).onChange(function (val)
+          {
+            starCount= val;
+           app.addStars(starCount, 1000);
+          });
+         /* starFolder.add(params, 'removeStars', 1, 10000).onChange(function(val)
+          {
+              starCount.starNumber = val;
+              removeStars(starCount.starNumber, 1000);
+          }
+          );*/
+          camFolder.add(params, 'sun', 0, 1).onChange(function (val)
+          {
+              atSun = val;
+              if(val==0)
+              {
+                app.camera.position.z = -350;
+                app.camera.position.x = 400;
+                app.camera.position.y = 100;
+				app.camera.up.set(0,0,1);   
+				app.camera.lookAt(app.scene.position);
+              }
+              else{ 
+              app.camera.position.x = 0;
+              app.camera.position.y = 0;
+              app.camera.position.z = 0;
+              }
+            
+          }
+          );
+          
+          camFolder.add(params, 'earth', 0, 1).onChange(function (val)
+          {
+              atEarth = val; 
+              if(val==0)
+              {
+				app.camera.position.z = -400;
+                app.camera.position.x = 400;
+                app.camera.position.y = 100;
+				app.camera.up.set(0,0,1);   
+				app.camera.lookAt(app.scene.position);
+              }
+              else{
+              app.camera.position.x = 200;
+              app.camera.position.y = 0;
+              app.camera.position.z = 0;
+              }
+            
+          }
+          );
+          camFolder.add(params, 'mercury', 0, 1).onChange(function (val)
+          {
+              atMercury = val; 
+              if(val==0)
+              {
+                app.camera.position.z = -400;
+                app.camera.position.x = 400;
+                app.camera.position.y = 100;
+				app.camera.up.set(0,0,1);   
+				app.camera.lookAt(app.scene.position);
+              }
+              else{
+				app.camera.position.x = 120;
+              app.camera.position.y = 0;
+              app.camera.position.z = 0;
+              }
+              
+          }
+          );
+         /* camFolder.add(params, 'venus', 0, 1).onChange(function (val)
+          {
+              atVenus = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 19;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'moon', 0, 1).onChange(function (val)
+          {
+              atMoon = val;
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else
+              {
+              camera.position.x = sun.position.x + 2.8;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'mars', 0, 1).onChange(function (val)
+          {
+              atMars = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 38;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'jupiter', 0, 1).onChange(function (val)
+          {
+              atJupiter = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 53;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'saturn', 0, 1).onChange(function (val)
+          {
+              atSaturn = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 78;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'uranus', 0, 1).onChange(function (val)
+          {
+              atUranus = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 100;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          camFolder.add(params, 'neptune', 0, 1).onChange(function (val)
+          {
+              atNeptune = val; 
+              if(val==0)
+              {
+                camera.position.z = 30;
+                camera.position.x = -30;
+                camera.position.y = 30;
+              }
+              else{
+              camera.position.x = sun.position.x + 120;
+              camera.position.y = sun.position.y;
+              camera.position.z = sun.position.z;
+              }
+              
+          }
+          );
+          
+          gui.add(params, 'night', 0, 1).onChange(function(val)
+          {
+              night = val;
+              if(val == 0)
+              {
+                  scene.add(earth);
+                  scene.remove(earthNight);
+              }
+              else{
+              scene.remove(earth);
+              earthNight = createTexturedPlanet(earthNightData);
+              }
+             
+          }
+          );*/
+         
+          gui.open();
+		}
+		buildGui();
+	
         app.render();
-    }
+    };
+	
+	
     main();
+	
 </script>
 </body>
 </html>

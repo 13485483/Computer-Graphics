@@ -22,7 +22,7 @@ var Application = function(baseContainer){
         baseContainer.appendChild(div);
         return div;
     }
-
+   
     // public 成员函数声明
     this.init = function(){
         this.renderer = new THREE.WebGLRenderer();
@@ -40,62 +40,73 @@ var Application = function(baseContainer){
 
         this.scene.add(new THREE.AmbientLight(0x505050));
         this.scene.add(new THREE.AmbientLight(0x676767));
-    };
-    this.addPlanets = function(){
-        this.planets = {};
-        this.planets.vir = {};
-        this.planets.real = {};
-        this.planets.virAll = new THREE.Object3D();
-        this.planets.realAll = new THREE.Object3D();
 
-        for (var key in Data.Dis) {
+       
+
+        this.addStars = function(starsCount, minDistance){
+            var d = function(){return (Math.random()-0.5)*2 * minDistance;}; // 返回[-1,1] * minDistance
+    
+            var geometry = new THREE.Geometry();
+            for(var i = 0; i < starsCount; i++){
+                var star = new THREE.Vector3(d(),d(),d());
+                if(star.length() < minDistance) { // 这是length()函数，代表向量长度
+                    star.setLength(minDistance);
+                }
+                geometry.vertices.push(star);
+            }
+            
+            var r = Math.random();
+            var size = 1;
+            if(r  < 0.5) size =1;
+            else if(r < 0.8) size = 2;
+            else size =3;
+            var material = new THREE.PointsMaterial({color:0xf0f0f0, size:size, sizeAttenuation: false});
+            var stars = new THREE.Points(geometry, material);
+            this.scene.add(stars);
+        };
+      
+
+        this.addPlanets = function(){
+            this.planets = {};
+            this.planets.vir = {};
+            this.planets.real = {};
+            this.planets.virAll = new THREE.Object3D();
+            this.planets.realAll = new THREE.Object3D();
+    
+            for (var key in Data.Dis) {
+                this.planets.vir[key] = Planet.create(key);
+                this.planets.virAll.add(this.planets.vir[key]);
+                this.planets.real[key] = PlanetReal.create(key);
+                this.planets.realAll.add(this.planets.real[key]);
+            }
+            key = "Sun";
             this.planets.vir[key] = Planet.create(key);
             this.planets.virAll.add(this.planets.vir[key]);
             this.planets.real[key] = PlanetReal.create(key);
             this.planets.realAll.add(this.planets.real[key]);
-        }
-        key = "Sun";
-        this.planets.vir[key] = Planet.create(key);
-        this.planets.virAll.add(this.planets.vir[key]);
-        this.planets.real[key] = PlanetReal.create(key);
-        this.planets.realAll.add(this.planets.real[key]);
+    
+            this.viewRole = "All";
+            this.scene.add(this.planets.virAll);
+        };
 
-        this.viewRole = "All";
-        this.scene.add(this.planets.virAll);
+        this.addPlanets();
+        this.addBox = function(){
+            var geometry = new THREE.BoxGeometry(100,100,100);
+            var material = new THREE.MeshLambertMaterial({color:0xff0000});
+            var mesh = new THREE.Mesh(geometry,material);
+            this.scene.add(mesh);
+            var light = new THREE.PointLight(0xffffff);
+            light.position.set(300,400,200);
+            this.scene.add(light);
+        };
+    
+        this.addBox();
+ 
     };
-    this.addBox = function(){
-        var geometry = new THREE.BoxGeometry(100,100,100);
-        var material = new THREE.MeshLambertMaterial({color:0xff0000});
-        var mesh = new THREE.Mesh(geometry,material);
-        this.scene.add(mesh);
-        var light = new THREE.PointLight(0xffffff);
-        light.position.set(300,400,200);
-        this.scene.add(light);
-    };
-
+   
 
     
-    this.addStars = function(starsCount, minDistance){
-        var d = function(){return (Math.random()-0.5)*2 * minDistance;}; // 返回[-1,1] * minDistance
 
-        var geometry = new THREE.Geometry();
-        for(var i = 0; i < starsCount; i++){
-            var star = new THREE.Vector3(d(),d(),d());
-            if(star.length() < minDistance) { // 这是length()函数，代表向量长度
-                star.setLength(minDistance);
-            }
-            geometry.vertices.push(star);
-        }
-        
-        var r = Math.random();
-        var size = 1;
-        if(r  < 0.5) size =1;
-        else if(r < 0.8) size = 2;
-        else size =3;
-        var material = new THREE.PointsMaterial({color:0xf0f0f0, size:size, sizeAttenuation: false});
-        var stars = new THREE.Points(geometry, material);
-        this.scene.add(stars);
-    };
 
         // 多视角，在键盘事件中调用,viewRole表示你站在那里,对每个星球设置一个观察点（Object）
     this.changeView =function(viewRole){
@@ -153,11 +164,7 @@ var Application = function(baseContainer){
 
     // 函数调用
     this.init();
-    //this.addBox();
-    this.addPlanets();
-    this.addStars(2000,1000);
-    this.addListener();
-
+this.addListener();
 
 };
 
