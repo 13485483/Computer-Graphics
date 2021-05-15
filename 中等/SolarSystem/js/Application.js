@@ -39,7 +39,10 @@ var Application = function(baseContainer){
         this.camera.lookAt(this.scene.position); // 由于帧刷新函数render里对camera的update，使得这里设置无效
 
         this.scene.add(new THREE.AmbientLight(0x505050));
-        this.scene.add(new THREE.AmbientLight(0x676767));
+        this.ambientLight1 = new THREE.AmbientLight(0x676767);
+        this.scene.add(this.ambientLight1);
+        this.pointLight = new THREE.PointLight(0xffdcb4, 0);
+        this.scene.add(this.pointLight);
 
        
 
@@ -100,7 +103,7 @@ var Application = function(baseContainer){
             this.scene.add(light);
         };
     
-        this.addBox();
+        //this.addBox();
  
     };
    
